@@ -50,7 +50,7 @@ namespace Zion
 		Window&     operator=(const Window & rhs);
 		~Window();
 
-		static void getError();
+		static void getError(char *ref);
 
 		bool        initWindow(const char *title, int width, int height);
 		GLFWwindow& getWindow() const;

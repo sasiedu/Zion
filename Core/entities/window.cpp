@@ -2,11 +2,11 @@
 
 namespace Zion
 {
-	void Window::getError()
+	void Window::getError(char *ref)
 	{
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR)
-			std::cout << "OpenGl error code : " << error << std::endl;
+			std::cout << "OpenGl error code : " << error << " in " << ref << std::endl;
 	}
 
 	Window::Window(const char *title, int width, int height) : _title(title), _width(width), _height(height)
@@ -78,7 +78,6 @@ namespace Zion
 		}
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
-		glShadeModel(GL_FLAT);
 		enableVsync();
 		glfwSetKeyCallback(_window, _input.keyCallback);
 		glfwSetMouseButtonCallback(_window, _input.mouseButtonCallback);
@@ -91,6 +90,7 @@ namespace Zion
 
 	void Window::updateWindow()
 	{
+		Window::getError((char *)"window update");
 		glfwPollEvents();
 		glfwSwapBuffers(_window);
 	}
