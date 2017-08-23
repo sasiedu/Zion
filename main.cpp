@@ -14,16 +14,21 @@ int     main(int ac, char **av)
 
 	Zion::SquareSprite square(shader, 0.0, 0.0, 0.5, 0.5);
 	square.addBaseColor({0.0, 1.0, 0.0, 1.0});
-	Zion::CubeSprite cube(shader, (float)-0.5, 0.0, 0, 0.3, 0.3, 0.3);
-	cube.addBaseColor({0.0, 0.0, 1.0, 1.0});
+	Zion::CubeSprite cube(shader, 0, 0.0, 0, 0.3, 0.3, 0.3);
+	//cube.addBaseColor({0.0, 0.0, 1.0, 1.0});
+	cube.addTextureFromFile("textures/floor.png");
 	//Zion::SquareSprite square1(shader, -0.5, 0.5, 0.5, 0.5);
 	//square1.addTextureFromFile("textures/floor.png");
+
+	glm::mat4 rot = glm::rotate(glm::mat4(), 45.0f, glm::vec3(0, 1, 0));
+	glm::mat4 trans = glm::translate(glm::mat4(), glm::vec3(0, 0, -0.6));
+	glm::mat4 mat = trans * rot;
 
 	while (!win.shouldClose() && !win.isKeyPressed(GLFW_KEY_ESCAPE))
 	{
 		win.clearWindow(0.0f, 0.0f, 0.0f, 1.0f);
 		square.render(glm::translate(glm::mat4(), glm::vec3(0, 0, -1)));
-		cube.render(glm::translate(glm::mat4(), glm::vec3(0, 0, -1)));
+		cube.render(mat);
 		//square1.render(glm::mat4());
 		win.updateWindow();
 	}

@@ -7,19 +7,20 @@ namespace Zion
 		GLushort indices[] = {0, 1, 2, 2, 3, 0, 1, 5, 6, 6, 2, 1, 7, 6, 5,
 		                      5, 4, 7, 4, 0, 3, 3, 7, 4, 4, 5, 1, 1, 0, 4, 3, 2, 6,
 		                      6, 7, 3};
+
 		GLfloat vertices[] =
 		{
-			-(length / 2) + posx, -(height / 2) + posy, (breadth / 2) + posz, 0,
-			(length / 2) + posx, -(height / 2) + posy, (breadth / 2) + posz, 0,
-			(length / 2) + posx, (height / 2) + posy, (breadth / 2) + posz, 0,
-			-(length / 2) + posx, (height / 2) + posy, (breadth / 2) + posz, 0,
-			-(length / 2) + posx, -(height / 2) + posy, -(breadth / 2) + posz, 0,
-			(length / 2) + posx, -(height / 2) + posy, -(breadth / 2) + posz, 0,
-			(length / 2) + posx, (height / 2) + posy, -(breadth / 2) + posz, 0,
-			-(length / 2) + posx, (height / 2) + posy, -(breadth / 2) + posz, 0
+			-(length / 2) + posx, -(height / 2) + posy, (breadth / 2) + posz, 0, 0, 0,
+			(length / 2) + posx, -(height / 2) + posy, (breadth / 2) + posz, 1, 0, 0,
+			(length / 2) + posx, (height / 2) + posy, (breadth / 2) + posz, 1, 1, 0,
+			-(length / 2) + posx, (height / 2) + posy, (breadth / 2) + posz, 0, 1, 0,
+			-(length / 2) + posx, -(height / 2) + posy, -(breadth / 2) + posz, 0, 0, 0,
+			(length / 2) + posx, -(height / 2) + posy, -(breadth / 2) + posz, 0, 1, 0,
+			(length / 2) + posx, (height / 2) + posy, -(breadth / 2) + posz, 1, 1, 0,
+			-(length / 2) + posx, (height / 2) + posy, -(breadth / 2) + posz, 1, 0, 0
 		};
 		_shader = shader;
-		_loadDataToGpu(vertices, 4 * 8, indices, 36,  sizeof(GLfloat) * 4);
+		_loadDataToGpu(vertices, 6 * 8, indices, 36,  sizeof(GLfloat) * 6);
 	}
 
 	CubeSprite::~CubeSprite()
@@ -33,6 +34,7 @@ namespace Zion
 	{
 		GLint position = _shader.getAttribLocation((char *)"position");
 		GLint matIndex = _shader.getAttribLocation((char *)"matIndex");
+		GLint uv = _shader.getAttribLocation((char *)"uv");
 
 		if (position != -1)
 		{
@@ -42,8 +44,14 @@ namespace Zion
 		if (matIndex != -1)
 		{
 			glEnableVertexAttribArray((GLuint)matIndex);
-			glVertexAttribPointer((GLuint)matIndex, 1, GL_FLOAT, GL_FALSE, stride, (void *)(sizeof(GLfloat) * 3));
+			glVertexAttribPointer((GLuint)matIndex, 1, GL_FLOAT, GL_FALSE, stride, (void *)(sizeof(GLfloat) * 5));
 		}
+		if (uv != -1)
+		{
+			glEnableVertexAttribArray((GLuint)uv);
+			glVertexAttribPointer((GLuint)uv, 2, GL_FLOAT, GL_FALSE, stride, (void *)(sizeof(GLfloat) * 3));
+		}
+		Window::getError((char *)"square add vertex attrib");
 	}
 
 	void CubeSprite::render(glm::mat4 matrix)
