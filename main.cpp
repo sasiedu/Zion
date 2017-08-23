@@ -16,6 +16,7 @@ int     main(int ac, char **av)
 {
 	Zion::Window    win;
 	Zion::Shader    shader;
+	Zion::Renderer  renderer;
 	Zion::Camera    camera =  Zion::Camera(glm::vec3(0, 0, 1));
 
 	win.initWindow("Test",  960, 540);
@@ -26,17 +27,18 @@ int     main(int ac, char **av)
 
 	Zion::SquareSprite square(shader, 0.0, 0.0, 0.5, 0.5);
 	square.addBaseColor({0.0, 1.0, 0.0, 1.0});
+	renderer.addToRender(&square, glm::translate(glm::mat4(), glm::vec3(0, 0, -1)));
 
 	Zion::CubeSprite cube(shader, 0, 0, -2, 5.5, 5.5, 5.5);
 	cube.addTextureFromFile("textures/floor.png");
+	renderer.addToRender(&cube, glm::translate(glm::mat4(), glm::vec3(-2, 0, 0)));
 
 	while (!win.shouldClose() && !win.isKeyPressed(GLFW_KEY_ESCAPE))
 	{
 		win.clearWindow(0.0f, 0.0f, 0.0f, 1.0f);
 		checkKeys(win, camera);
 		shader.setUniformMat4((GLchar *)"view_matrix", camera.getViewMatrix());
-		square.render(glm::translate(glm::mat4(), glm::vec3(0, 0, -1)));
-		cube.render(glm::translate(glm::mat4(), glm::vec3(-2, 0, 0)));
+		renderer.render();
 		win.updateWindow();
 	}
 	return 0;
