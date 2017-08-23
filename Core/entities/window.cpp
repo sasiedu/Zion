@@ -76,8 +76,10 @@ namespace Zion
 			std::cerr << "Failed to initialize GLEW!" << std::endl;
 			return false;
 		}
+		glViewport(0, 0, _width, _height);
 		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		enableVsync();
 		glfwSetKeyCallback(_window, _input.keyCallback);
 		glfwSetMouseButtonCallback(_window, _input.mouseButtonCallback);

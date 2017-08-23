@@ -27,12 +27,15 @@ namespace Zion
 		bool    loadTextureFromPath(const char *path);
 		bool    loadTextureFromData(unsigned char *data, size_t len);
 		bool    isLoaded() const;
+		void    bindTexture(int index = 0);
+		void    unbindTexture();
+		GLuint  getTextureId() const;
 	};
 
 	struct      Material
 	{
 		Texture     texure;
-		glm::vec4   base_color;
+		glm::vec4   base_color = glm::vec4(1.0, 1.0, 1.0, 1.0);
 		glm::vec4   spec_color;
 	};
 }

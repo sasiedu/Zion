@@ -122,4 +122,21 @@ namespace Zion
 	{
 		return glGetAttribLocation(_programId, name);
 	}
+
+	GLint Shader::getUniformLocation(GLchar *name)
+	{
+		return glGetUniformLocation(_programId, name);
+	}
+
+	void Shader::setUniform1i(GLchar *name, int value)
+	{
+		enable();
+		glUniform1i(getUniformLocation(name), value);
+	}
+
+	void Shader::setUniform4f(GLchar *name, glm::vec4 &vec)
+	{
+		enable();
+		glUniform4f(getUniformLocation(name), vec.x, vec.y, vec.z, vec.w);
+	}
 }
