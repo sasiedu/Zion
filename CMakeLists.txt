@@ -26,7 +26,8 @@ link_directories(
         ${GLM_LIBRARY_DIRS}
 )
 
-set(LIB_SOURCE_FILES Core/zion.cpp)
+set(LIB_SOURCE_FILES Core/entities/window.cpp Core/entities/input.cpp)
+
 add_library(zion STATIC ${LIB_SOURCE_FILES})
 if (APPLE)
     set(OPENGL_FLAGS "-framework OpenGL -framework GLUT -framework Cocoa -framework IOKit -framework CoreVideo")
@@ -42,3 +43,6 @@ target_link_libraries(${PROJECT_NAME}
         ${GLM_LIBRARIES}
         zion
 )
+if (APPLE)
+    target_link_libraries(${PROJECT_NAME} ${OPENGL_FLAGS})
+endif()
