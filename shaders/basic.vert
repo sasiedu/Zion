@@ -10,10 +10,17 @@ out vec3    fnormal;
 out vec2    fuv;
 out float   fmatIndex;
 
+uniform mat4    model_matrix = mat4(1.0);
+uniform mat4    view_matrix = mat4(1.0);
+uniform mat4    proj_matrix = mat4(1.0);
+
 void main() {
     fposition = position;
     fnormal = normal;
     fuv = uv;
     fmatIndex = matIndex;
-	gl_Position = vec4(position, 1.0);
+
+    mat4    mvp = proj_matrix * view_matrix * model_matrix;
+
+	gl_Position = mvp * vec4(position, 1.0);
 }

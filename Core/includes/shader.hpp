@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <util.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Zion
 {
@@ -27,5 +28,6 @@ namespace Zion
 		GLint   getUniformLocation(GLchar *name);
 		void    setUniform1i(GLchar *name, int value);
 		void    setUniform4f(GLchar *name, glm::vec4& vec);
+		void    setUniformMat4(GLchar *name, glm::mat4 &matrix);
 	};
 }

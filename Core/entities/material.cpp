@@ -22,6 +22,7 @@ namespace Zion
 
 	Texture::~Texture()
 	{
+		glDeleteTextures(1, &_textId);
 	}
 
 	bool Texture::loadTextureFromPath(const char *path)

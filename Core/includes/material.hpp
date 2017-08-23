@@ -10,7 +10,7 @@ namespace Zion
 	class   Texture
 	{
 	private:
-		GLuint  _textId;
+		GLuint  _textId = 0;
 		bool    _loaded = false;
 		int     _width;
 		int     _height;
