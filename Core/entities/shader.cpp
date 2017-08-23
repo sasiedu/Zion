@@ -140,7 +140,7 @@ namespace Zion
 		glUniform4f(getUniformLocation(name), vec.x, vec.y, vec.z, vec.w);
 	}
 
-	void Shader::setUniformMat4(GLchar *name, glm::mat4 &matrix)
+	void Shader::setUniformMat4(GLchar *name, glm::mat4 matrix)
 	{
 		enable();
 		glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));

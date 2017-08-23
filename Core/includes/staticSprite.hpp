@@ -62,8 +62,9 @@ namespace Zion
 	struct  CubeSprite : public StaticSprite
 	{
 	private:
-		GLuint  _uvVbo;
-		void    _addVertexAttrib(GLsizei stride);
+		GLuint      _uvVbo;
+		void        _addVertexAttrib(GLsizei stride);
+		glm::mat4   _cubeMat;
 	public:
 		CubeSprite(Shader& shader, float posx, float posy, float posz, float breadth, float length, float height);
 		~CubeSprite();

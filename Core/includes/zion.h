@@ -4,3 +4,4 @@
 #include <util.h>
 #include <shader.hpp>
 #include <staticSprite.hpp>
+#include <camera.hpp>
