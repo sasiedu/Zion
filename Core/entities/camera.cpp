@@ -1,12 +1,15 @@
 #include <camera.hpp>
+#include <renderable.hpp>
 
 namespace Zion
 {
-	Camera::Camera(glm::vec3 positon, float pitch, float yaw)
+	Camera::Camera(glm::vec3 position, glm::vec3 target, float pitch, float yaw)
 	{
-		_position = positon;
-		_pitch = pitch;
-		_yaw = yaw;
+		_position = position;
+		_target = target;
+		_direction = glm::normalize(_position - _target);
+		_right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), _direction));
+		_up = glm::cross(_direction, _right);
 		_updateCamera();
 	}
 
@@ -26,13 +29,7 @@ namespace Zion
 
 	void Camera::_updateCamera()
 	{
-		glm::mat4   viewMat;
-
-		viewMat = glm::rotate(viewMat, glm::radians(_pitch), glm::vec3(1, 0, 0));
-		viewMat = glm::rotate(viewMat, glm::radians(_yaw), glm::vec3(0, 1, 0));
-		glm::vec3 negCameraPos = _position * -1.0f;
-		viewMat = glm::translate(viewMat, negCameraPos);
-		_viewMatrix = viewMat;
+		_viewMatrix = glm::lookAt(_position, _position + _front, glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 
 	glm::mat4 Camera::getViewMatrix() const
@@ -42,13 +39,13 @@ namespace Zion
 
 	void Camera::moveLeft(float val)
 	{
-		_position.x -= val;
+		_position -= glm::normalize(glm::cross(_front, _up)) * (val * Renderable::deltaTime);
 		_updateCamera();
 	}
 
 	void Camera::moveRight(float val)
 	{
-		_position.x += val;
+		_position += glm::normalize(glm::cross(_front, _up)) * (val * Renderable::deltaTime);
 		_updateCamera();
 	}
 
@@ -62,13 +59,13 @@ namespace Zion
 
 	void Camera::moveIn(float val)
 	{
-		_position.z -= val;
+		_position += (val * Renderable::deltaTime) * _front;
 		_updateCamera();
 	}
 
 	void Camera::moveOut(float val)
 	{
-		_position.z += val;
+		_position -= (val * Renderable::deltaTime) * _front;
 		_updateCamera();
 	}
 }

@@ -2,7 +2,9 @@
 
 namespace Zion
 {
-	double  Renderable::startTime;
+	float   Renderable::startTime;
+	float   Renderable::runTime;
+	float   Renderable::deltaTime;
 
 	SquareSprite::SquareSprite(Shader &shader, float posx, float posy, float width, float height)
 	{

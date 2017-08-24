@@ -19,7 +19,9 @@ namespace Zion
 			return "";
 		}
 	public:
-		static double   startTime;
+		static  float   startTime;
+		static  float   runTime;
+		static  float   deltaTime;
 
 		virtual void    render(glm::mat4 matrix) = 0;
 	};
