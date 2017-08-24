@@ -9,11 +9,10 @@ namespace Zion
 	{
 	private:
 		glm::vec3   _position;
-		glm::vec3   _direction;
-		glm::vec3   _target;
-		glm::vec3   _up;
+		glm::vec3   _front;
 		glm::vec3   _right;
-		glm::vec3   _front = glm::vec3(0.0f, 0.0f, -1.0f);
+		glm::vec3   _worldUp;
+		glm::vec3   Up;
 		float       _pitch;
 		float       _yaw;
 		float       _roll;
@@ -21,18 +20,17 @@ namespace Zion
 	private:
 		void        _updateCamera();
 	public:
-		Camera(glm::vec3 position = glm::vec3(0, 0, 3), glm::vec3 target = glm::vec3(0, 0, 0),
-		       float pitch = 0.0f, float yaw = 0.0f);
+		Camera(glm::vec3 position = glm::vec3(0, 0, 0), float pitch = 0, float yaw = -90.0f);
 		Camera(const Camera & rhs);
 		Camera&     operator=(const Camera& rhs);
-		~Camera();
+		~Camera() = default;
 
 		glm::mat4       getViewMatrix() const;
 		void            moveLeft(float val);
 		void            moveRight(float val);
 		void            moveUp(float val);
 		void            moveDown(float val);
-		void            moveIn(float val);
-		void            moveOut(float val);
+		void            moveForward(float val);
+		void            moveBackward(float val);
 	};
 }

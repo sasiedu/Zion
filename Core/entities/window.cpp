@@ -80,7 +80,8 @@ namespace Zion
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_CULL_FACE); /// to tell opengl to render unseen part of a model
+		glCullFace(GL_BACK); /// tells opengl with unseen part not to render
 		enableVsync();
 		glfwSetKeyCallback(_window, _input.keyCallback);
 		glfwSetMouseButtonCallback(_window, _input.mouseButtonCallback);

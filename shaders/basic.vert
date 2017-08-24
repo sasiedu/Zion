@@ -21,7 +21,7 @@ void main() {
     fuv = uv;
     fmatIndex = matIndex;
 
-    mat4    mvp = proj_matrix * view_matrix * model_matrix;
+    mat4    mvp = proj_matrix * view_matrix;
 
-	gl_Position = mvp * vec4(position, 1.0);
+	gl_Position = mvp *  model_matrix * vec4(position, 1.0);
 }

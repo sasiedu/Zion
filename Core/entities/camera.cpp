@@ -3,50 +3,50 @@
 
 namespace Zion
 {
-	Camera::Camera(glm::vec3 position, glm::vec3 target, float pitch, float yaw)
+	Camera::Camera(glm::vec3 position, float pitch, float yaw)
 	{
 		_position = position;
-		_target = target;
-		_direction = glm::normalize(_position - _target);
-		_right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), _direction));
-		_up = glm::cross(_direction, _right);
+		_worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+		_front = glm::vec3(0.0f, 0.0f, -1.0f);
+		_yaw = yaw;
+		_pitch = pitch;
 		_updateCamera();
 	}
 
-	Camera::Camera(const Camera &rhs)
-	{
-		*this = rhs;
-	}
+	Camera::Camera(const Camera &rhs) { *this = rhs; }
 
 	Camera& Camera::operator=(const Camera &rhs)
 	{
 		return *this;
 	}
 
-	Camera::~Camera()
-	{
-	}
-
 	void Camera::_updateCamera()
 	{
-		_viewMatrix = glm::lookAt(_position, _position + _front, glm::vec3(0.0f, 1.0f, 0.0f));
+		/// Calculate the new Front vector
+		glm::vec3 front;
+		front.x = (float)(cos(glm::radians(_yaw)) * cos(glm::radians(_pitch)));
+		front.y = (float)sin(glm::radians(_pitch));
+		front.z = (float)(sin(glm::radians(_yaw)) * cos(glm::radians(_pitch)));
+		_front = glm::normalize(front);
+		/// Also re-calculate the Right and Up vector
+		_right = glm::normalize(glm::cross(_front, _worldUp));
+		Up = glm::normalize(glm::cross(_right, _front));
 	}
 
-	glm::mat4 Camera::getViewMatrix() const
-	{
-		return _viewMatrix;
+	glm::mat4 Camera::getViewMatrix() const {
+		return glm::lookAt(_position, _position + _front, Up);
 	}
 
 	void Camera::moveLeft(float val)
 	{
-		_position -= glm::normalize(glm::cross(_front, _up)) * (val * Renderable::deltaTime);
-		_updateCamera();
+		_position -= _right * (val * Renderable::deltaTime);
+		//_updateCamera();
 	}
 
 	void Camera::moveRight(float val)
 	{
-		_position += glm::normalize(glm::cross(_front, _up)) * (val * Renderable::deltaTime);
-		_updateCamera();
+		_position += _right * (val * Renderable::deltaTime);
+		//_updateCamera();
 	}
 
 	void Camera::moveUp(float val)
@@ -57,15 +57,15 @@ namespace Zion
 	{
 	}
 
-	void Camera::moveIn(float val)
+	void Camera::moveForward(float val)
 	{
-		_position += (val * Renderable::deltaTime) * _front;
-		_updateCamera();
+		_position += _front * (val * Renderable::deltaTime);
+		//_updateCamera();
 	}
 
-	void Camera::moveOut(float val)
+	void Camera::moveBackward(float val)
 	{
-		_position -= (val * Renderable::deltaTime) * _front;
-		_updateCamera();
+		_position -= _front * (val * Renderable::deltaTime);
+		//_updateCamera();
 	}
 }

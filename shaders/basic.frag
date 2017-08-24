@@ -23,6 +23,10 @@ void main() {
     {
         if (i == 0)
             color *= texture(textures[0], fuv);
+        else if (i == 1)
+            color *= texture(textures[1], fuv);
+        else if (i == 2)
+            color *= texture(textures[2], fuv);
     }
 	out_color = color;
 	//out_color = vec4(0, 1, 0, 1);
