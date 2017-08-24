@@ -15,6 +15,7 @@ namespace Zion
 		void    _processModelMesh(tinygltf::Mesh& mesh, int node);
 		void    _loadDataToGpu();
 		void    _loadMaterials();
+		void    _clearVectors();
 	public:
 		Gltf() = default;
 		Gltf(Shader& shader, const char *path);

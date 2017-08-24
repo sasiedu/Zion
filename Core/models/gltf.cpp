@@ -31,6 +31,9 @@ namespace Zion
 		for (GLuint& vbo : _vbos)
 			glDeleteBuffers(1, &vbo);
 		_vbos.clear();
+		_materials.clear();
+		glDeleteBuffers(1, &_ibo);
+		glDeleteVertexArrays(1, &_vao);
 	}
 
 	bool Gltf::loadFromFile(Shader &shader, const char *path)
@@ -71,6 +74,7 @@ namespace Zion
 			}
 		}
 		_loadDataToGpu();
+		_loadMaterials();
 		_loaded = true;
 		return true;
 	}
@@ -118,25 +122,23 @@ namespace Zion
 			Acc = acc[prim.indices];
 			bufView = bufViews[Acc.bufferView];
 			auto *indicesData = (GLushort *)(bufs[bufView.buffer].data.data() + bufView.byteOffset);
-			//_indices.insert(_indices.end(), indicesData, indicesData + Acc.count);
 			for (int i = 0; i < Acc.count; i++)
-			{
 				_indices.push_back((GLushort)(indicesData[i] + currVecSize));
-			}
 		}
 	}
 
 	void Gltf::_loadDataToGpu()
 	{
-		GLuint  vbo[4];
+		GLuint  vbo[5];
 		GLint position = _shader.getAttribLocation((char *)"position");
 		GLint matIndex = _shader.getAttribLocation((char *)"matIndex");
 		GLint normal = _shader.getAttribLocation((char *)"normal");
 		GLint uv = _shader.getAttribLocation((char *)"uv");
+		GLint node = _shader.getAttribLocation((char *)"node");
 
 		glGenVertexArrays(1, &_vao);
 		glBindVertexArray(_vao);
-		glGenBuffers(4, vbo);
+		glGenBuffers(5, vbo);
 		_vbos.insert(_vbos.end(), vbo, vbo + 4);
 		if (!_vertex.empty() && position != -1)
 		{
@@ -162,9 +164,17 @@ namespace Zion
 			glVertexAttribPointer((GLuint)matIndex, 1, GL_FLOAT, GL_FALSE, 0, (void *)nullptr);
 			Window::getError((char *)"after adding matIndex in Gltf model");
 		}
-		if (!_uvs.empty() && uv != -1)
+		if (!_nodes.empty() && node != -1)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, vbo[3]);
+			glBufferData(GL_ARRAY_BUFFER, _nodes.size() * sizeof(int), _nodes.data(), GL_STATIC_DRAW);
+			glEnableVertexAttribArray((GLuint)node);
+			glVertexAttribPointer((GLuint)node, 1, GL_INT, GL_FALSE, 0, (void *)nullptr);
+			Window::getError((char *)"after adding node in Gltf model");
+		}
+		if (!_uvs.empty() && uv != -1)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, vbo[4]);
 			glBufferData(GL_ARRAY_BUFFER, _uvs.size() * sizeof(GLfloat), _uvs.data(), GL_STATIC_DRAW);
 			glEnableVertexAttribArray((GLuint)uv);
 			glVertexAttribPointer((GLuint)uv, 2, GL_FLOAT, GL_FALSE, 0, (void *)nullptr);
@@ -176,27 +186,67 @@ namespace Zion
 			GL_STATIC_DRAW);
 		Window::getError((char *)"after adding indices in Gltf model");
 		glBindVertexArray(0);
+		_clearVectors();
+	}
+
+	void Gltf::_clearVectors()
+	{
+		_indicesCount = (GLushort)_indices.size();
+		_indices.clear();
+		_vertex.clear();
+		_matIndexs.clear();
+		_normals.clear();
+		_uvs.clear();
+		_nodes.clear();
 	}
 
 	void Gltf::_loadMaterials()
 	{
-		Material newMat;
+		int     index = 0;
 
 		for (tinygltf::Material& mat : _model.materials)
 		{
+			Material newMat;
 			for (std::pair<std::string, tinygltf::Parameter> val : mat.values)
 			{
+				if (val.first == std::string("baseColorFactor") && val.second.number_array.size() == 4)
+				{
+					newMat.base_color = glm::vec4(
+							(float)val.second.number_array[0],
+							(float)val.second.number_array[1],
+							(float)val.second.number_array[2],
+							(float)val.second.number_array[3]
+					);
+				}
+				if (val.first == std::string("baseColorTexture") && !val.second.json_double_value.empty())
+				{
+					for (std::pair<std::string, double> ind : val.second.json_double_value)
+					{
+						tinygltf::Image& image = _model.images[_model.textures[(int)ind.second].source];
+						//tinygltf::Sampler& sampler = _model.samplers[_model.textures[(int)ind.second].sampler];
+
+						newMat.texure.loadTextureFromData(image.image.data(),
+						                                  _model.bufferViews[image.bufferView].byteLength);
+						break;
+					}
+				}
 
 			}
+			addMaterial(index++, newMat);
 		}
 	}
 
 	void Gltf::render(glm::mat4 matrix)
 	{
 		_shader.enable();
+		for (std::pair<int, Material> material : _materials)
+			Material::sendMaterialToShader(_shader, material.second, material.first);
+		_shader.setUniformMat4((GLchar *)"model_matrix", matrix);
 		glBindVertexArray(_vao);
-		glDrawElements(GL_TRIANGLES, (GLushort)_indices.size(), GL_UNSIGNED_SHORT, (const GLvoid *)nullptr);
+		glDrawElements(GL_TRIANGLES, _indicesCount, GL_UNSIGNED_SHORT, (const GLvoid *)nullptr);
 		glBindVertexArray(0);
+		for (std::pair<int, Material> material : _materials)
+			material.second.texure.unbindTexture();
 		_shader.disable();
 	}
 }

@@ -93,4 +93,16 @@ namespace Zion
 			return _textId;
 		return 0;
 	}
+
+	void Material::sendMaterialToShader(Shader& shader, Material &mat, int index)
+	{
+		mat.texure.bindTexture(index);
+		std::string str = std::string("textures[") + std::to_string(index) + std::string("]");
+		std::string str1 = std::string("isTexture[") + std::to_string(index) + std::string("]");
+		std::string str2 = std::string("texColor[") + std::to_string(index) + std::string("]");
+
+		shader.setUniform1i((GLchar *)str.c_str(), index);
+		shader.setUniform1i((GLchar *)str1.c_str(), (int)mat.texure.isLoaded());
+		shader.setUniform4f((GLchar *)str2.c_str(), mat.base_color);
+	}
 }

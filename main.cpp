@@ -35,7 +35,6 @@ int     main(int ac, char **av)
 	//renderer.addToRender(&cube, glm::translate(glm::mat4(), glm::vec3(-2, 0, 0)));
 
 	model.loadFromFile(shader, "models/bomberman.gltf");
-	//model.loadFromFile(shader, "models/box.glb");
 	renderer.addToRender(&model, glm::translate(glm::mat4(), glm::vec3(0, 0, -2)));
 
 	while (!win.shouldClose() && !win.isKeyPressed(GLFW_KEY_ESCAPE))

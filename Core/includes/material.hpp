@@ -4,6 +4,7 @@
 #include <iostream>
 #include <window.hpp>
 #include <glm/glm.hpp>
+#include <shader.hpp>
 
 namespace Zion
 {
@@ -40,5 +41,6 @@ namespace Zion
 
 		Material() = default;
 		~Material() = default;
+		static  void    sendMaterialToShader(Shader& shader, Material& mat, int index);
 	};
 }

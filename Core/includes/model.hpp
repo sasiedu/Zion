@@ -21,6 +21,7 @@ namespace Zion
 		std::map<int, Material> _materials;
 		bool                    _loaded = false;
 		glm::mat4               _locMat;
+		GLushort                _indicesCount;
 	public:
 		template <typename T>
 		static  void    loadOneManyToVector(std::vector<T>& list, T val, int count)
