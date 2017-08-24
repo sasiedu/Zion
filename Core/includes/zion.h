@@ -5,3 +5,4 @@
 #include <shader.hpp>
 #include <staticSprite.hpp>
 #include <camera.hpp>
+#include <gltf.hpp>

@@ -12,7 +12,7 @@ uniform vec4        texColor[10];
 out vec4 out_color;
 
 void main() {
-    int i = 0;
+    /*int i = 0;
     for (; i < 10; i++)
     {
         if (i == int(fmatIndex))
@@ -24,5 +24,6 @@ void main() {
         if (i == 0)
             color *= texture(textures[0], fuv);
     }
-	out_color = color;
+	out_color = color;*/
+	out_color = vec4(0, 1, 0, 1);
 }

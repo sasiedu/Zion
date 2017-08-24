@@ -18,6 +18,7 @@ int     main(int ac, char **av)
 	Zion::Shader    shader;
 	Zion::Renderer  renderer;
 	Zion::Camera    camera =  Zion::Camera(glm::vec3(0, 0, 1));
+	Zion::Gltf      model;
 
 	win.initWindow("Test",  960, 540);
 	shader.initShader("shaders/basic.vert", "shaders/basic.frag");
@@ -27,11 +28,15 @@ int     main(int ac, char **av)
 
 	Zion::SquareSprite square(shader, 0.0, 0.0, 0.5, 0.5);
 	square.addBaseColor({0.0, 1.0, 0.0, 1.0});
-	renderer.addToRender(&square, glm::translate(glm::mat4(), glm::vec3(0, 0, -1)));
+	//renderer.addToRender(&square, glm::translate(glm::mat4(), glm::vec3(0, 0, -1)));
 
-	Zion::CubeSprite cube(shader, 0, 0, -2, 5.5, 5.5, 5.5);
+	Zion::CubeSprite cube(shader, 0, 0, -2, 2.5, 2.5, 2.5);
 	cube.addTextureFromFile("textures/floor.png");
-	renderer.addToRender(&cube, glm::translate(glm::mat4(), glm::vec3(-2, 0, 0)));
+	//renderer.addToRender(&cube, glm::translate(glm::mat4(), glm::vec3(-2, 0, 0)));
+
+	model.loadFromFile(shader, "models/bomberman.gltf");
+	//model.loadFromFile(shader, "models/box.glb");
+	renderer.addToRender(&model, glm::translate(glm::mat4(), glm::vec3(0, 0, -2)));
 
 	while (!win.shouldClose() && !win.isKeyPressed(GLFW_KEY_ESCAPE))
 	{
