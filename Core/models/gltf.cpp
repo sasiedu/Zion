@@ -44,6 +44,7 @@ namespace Zion
 		tinygltf::TinyGLTF  loader;
 
 		_shader = shader;
+		_path = std::string(path);
 		if (ext.compare("glb") == 0)
 			ret = loader.LoadBinaryFromFile(&_model, &err, path);
 		else
@@ -75,6 +76,7 @@ namespace Zion
 		}
 		_loadDataToGpu();
 		_loadMaterials();
+		_clearVectors();
 		_loaded = true;
 		return true;
 	}
@@ -186,7 +188,6 @@ namespace Zion
 			GL_STATIC_DRAW);
 		Window::getError((char *)"after adding indices in Gltf model");
 		glBindVertexArray(0);
-		_clearVectors();
 	}
 
 	void Gltf::_clearVectors()
@@ -225,8 +226,18 @@ namespace Zion
 						tinygltf::Image& image = _model.images[_model.textures[(int)ind.second].source];
 						//tinygltf::Sampler& sampler = _model.samplers[_model.textures[(int)ind.second].sampler];
 
-						newMat.texure.loadTextureFromData(image.image.data(),
+						if (image.uri.empty())
+							newMat.texure.loadTextureFromData(image.image.data(),
 						                                  _model.bufferViews[image.bufferView].byteLength);
+						else
+						{
+							std::size_t found = _path.find_last_of("/");
+							if (found == std::string::npos)
+								newMat.texure.loadTextureFromPath(image.uri.c_str());
+							else
+								newMat.texure.loadTextureFromPath
+										((_path.substr(0, found+1) + image.uri).c_str());
+						}
 						break;
 					}
 				}

@@ -33,7 +33,7 @@ if (APPLE)
     set(OPENGL_FLAGS "-framework OpenGL -framework GLUT -framework Cocoa -framework IOKit -framework CoreVideo")
 endif()
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES Game/main.cpp)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME}
         ${OPENGL_LIBRARIES}
