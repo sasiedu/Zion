@@ -108,7 +108,8 @@ void MainGame::loadResources()
 
 void MainGame::gameLoop()
 {
-	glm::mat4 viewMatrix;
+	glm::mat4   viewMatrix;
+	glm::vec3   viewPos;
 
 	Zion::Renderable::startTime = (float)glfwGetTime();
 	Zion::Renderable::runTime = Zion::Renderable::startTime;
@@ -123,8 +124,12 @@ void MainGame::gameLoop()
 		for (std::pair<const char *, Func> func : functions)
 			func.second.func(this, func.second.params);
 		viewMatrix = _camera->getViewMatrix();
+		viewPos = _camera->getCameraPositon();
 		for (std::pair<const char *, Zion::Shader *> shader : _shaders)
+		{
 			shader.second->setUniformMat4((GLchar *)"view_matrix", viewMatrix);
+			shader.second->setUniform3f((GLchar *)"viewPos", viewPos);
+		}
 		MainGame::renderer.render();
 		_window.updateWindow();
 	}

@@ -63,6 +63,7 @@ namespace Zion
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL
+		glfwWindowHint(GLFW_SAMPLES, 4);
 		if (!(bool)(_window = glfwCreateWindow(_width, _height, _title, nullptr, nullptr)))
 		{
 			std::cerr << "Failed to create GLFW window!" << std::endl;
@@ -82,6 +83,7 @@ namespace Zion
 		glEnable(GL_BLEND);
 		glEnable(GL_CULL_FACE); /// to tell opengl to render unseen part of a model
 		glCullFace(GL_BACK); /// tells opengl with unseen part not to render
+		glEnable(GL_MULTISAMPLE);
 		enableVsync();
 		glfwSetKeyCallback(_window, _input.keyCallback);
 		glfwSetMouseButtonCallback(_window, _input.mouseButtonCallback);

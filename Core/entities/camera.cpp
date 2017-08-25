@@ -86,4 +86,6 @@ namespace Zion
 		_position.z += z * Renderable::deltaTime;
 		_updateCamera();
 	}
+
+	glm::vec3 Camera::getCameraPositon() { return _position; }
 }
