@@ -18,6 +18,7 @@ include_directories(
         ${GLFW3_INCLUDE_DIRS}
         ${ASSIMP_INCLUDE_DIRS}
         ${GLM_INCLUDE_DIRS}
+        ${PROJECT_SOURCE_DIR}/Bomberman/include
 )
 link_directories(
         ${GLEW_LIBRARY_DIRS}
@@ -34,6 +35,7 @@ if (APPLE)
 endif()
 
 set(SOURCE_FILES Game/main.cpp)
+
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME}
         ${OPENGL_LIBRARIES}
@@ -45,4 +47,18 @@ target_link_libraries(${PROJECT_NAME}
 )
 if (APPLE)
     target_link_libraries(${PROJECT_NAME} ${OPENGL_FLAGS})
+endif()
+
+set(B_SOURCE_FILES Bomberman/main.cpp Bomberman/src/MainGame.cpp Bomberman/src/scene.cpp)
+add_executable(Bomberman ${B_SOURCE_FILES})
+target_link_libraries(Bomberman
+        ${OPENGL_LIBRARIES}
+        ${GLEW_LIBRARIES}
+        ${GLFW3_LIBRARIES}
+        ${ASSIMP_LIBRARIES}
+        ${GLM_LIBRARIES}
+        zion
+        )
+if (APPLE)
+    target_link_libraries(Bomberman ${OPENGL_FLAGS})
 endif()

@@ -9,29 +9,25 @@ namespace Zion
 
 	Renderer& Renderer::operator=(const Renderer &rhs)
 	{
-		if (this != &rhs)
-		{
-			_models = rhs._models;
-			_mats = rhs._mats;
-		}
 		return *this;
 	}
 
 	Renderer::~Renderer()
 	{
-		_models.clear();
-		_mats.clear();
+		_objects.clear();
 	}
 
-	void Renderer::addToRender(Renderable *model, glm::mat4 mat)
+	void Renderer::addToRender(const char *type, int id, Renderable *model, glm::mat4 mat)
 	{
-		_models.push_back(model);
-		_mats.push_back(mat);
+		_objects[type].push_back({id, model, mat});
 	}
 
 	void Renderer::render()
 	{
-		for (int i = 0; i < _models.size(); i++)
-			_models[i]->render(_mats[i]);
+		for (std::pair<const char *, std::vector<RendererObj>> pair : _objects)
+		{
+			for (RendererObj obj : pair.second)
+				obj.model->render(obj.matrix);
+		}
 	}
 }

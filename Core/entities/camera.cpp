@@ -68,4 +68,22 @@ namespace Zion
 		_position -= _front * (val * Renderable::deltaTime);
 		//_updateCamera();
 	}
+
+	void Camera::changeCameraXPos(float x)
+	{
+		_position.x += x * Renderable::deltaTime;
+		_updateCamera();
+	}
+
+	void Camera::changeCameraYPos(float y)
+	{
+		_position.y += y * Renderable::deltaTime;
+		_updateCamera();
+	}
+
+	void Camera::changeCameraZPos(float z)
+	{
+		_position.z += z * Renderable::deltaTime;
+		_updateCamera();
+	}
 }

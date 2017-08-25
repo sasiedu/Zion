@@ -4,6 +4,7 @@
 #include <window.hpp>
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
+#include <map>
 
 namespace Zion
 {
@@ -26,18 +27,24 @@ namespace Zion
 		virtual void    render(glm::mat4 matrix) = 0;
 	};
 
+	struct  RendererObj
+	{
+		int         id;
+		Renderable  *model;
+		glm::mat4   matrix;
+	};
+
 	struct  Renderer
 	{
 	private:
-		std::vector<Renderable*>  _models;
-		std::vector<glm::mat4>    _mats;
+		std::map<const char *, std::vector<RendererObj>>    _objects;
 	public:
 		Renderer() = default;
 		Renderer(const Renderer & rhs);
 		Renderer&   operator=(const Renderer & rhs);
 		~Renderer();
 
-		void    addToRender(Renderable *model, glm::mat4 mat = glm::mat4(1.0f));
+		void    addToRender(const char *type, int id, Renderable *model, glm::mat4 mat = glm::mat4(1.0f));
 		void    render();
 	};
 }

@@ -32,5 +32,8 @@ namespace Zion
 		void            moveDown(float val);
 		void            moveForward(float val);
 		void            moveBackward(float val);
+		void            changeCameraXPos(float x);
+		void            changeCameraYPos(float y);
+		void            changeCameraZPos(float z);
 	};
 }
