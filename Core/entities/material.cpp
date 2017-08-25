@@ -3,6 +3,8 @@
 
 namespace Zion
 {
+	std::vector<GLuint>     Texture::textureIDs;
+
 	Texture::Texture(const char *path)
 	{
 		loadTextureFromPath(path);
@@ -22,7 +24,7 @@ namespace Zion
 
 	Texture::~Texture()
 	{
-		glDeleteTextures(1, &_textId);
+		//glDeleteTextures(1, &_textId);
 	}
 
 	bool Texture::loadTextureFromPath(const char *path)
@@ -60,6 +62,7 @@ namespace Zion
 	bool Texture::_loadImageToGPU(unsigned char *data)
 	{
 		glGenTextures(1, &_textId);
+		Texture::textureIDs.push_back(_textId);
 		glBindTexture(GL_TEXTURE_2D, _textId);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

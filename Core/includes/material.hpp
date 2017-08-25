@@ -5,6 +5,7 @@
 #include <window.hpp>
 #include <glm/glm.hpp>
 #include <shader.hpp>
+#include <vector>
 
 namespace Zion
 {
@@ -18,6 +19,8 @@ namespace Zion
 		int     _channel;
 	private:
 		bool    _loadImageToGPU(unsigned char *data);
+	public:
+		static std::vector<GLuint>  textureIDs;
 	public:
 		Texture() = default;
 		Texture(const char *path);

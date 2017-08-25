@@ -208,10 +208,12 @@ namespace Zion
 		for (tinygltf::Material& mat : _model.materials)
 		{
 			Material newMat;
+			bool    foundMat = false;
 			for (std::pair<std::string, tinygltf::Parameter> val : mat.values)
 			{
 				if (val.first == std::string("baseColorFactor") && val.second.number_array.size() == 4)
 				{
+					foundMat = true;
 					newMat.base_color = glm::vec4(
 							(float)val.second.number_array[0],
 							(float)val.second.number_array[1],
@@ -223,6 +225,7 @@ namespace Zion
 				{
 					for (std::pair<std::string, double> ind : val.second.json_double_value)
 					{
+						foundMat = true;
 						tinygltf::Image& image = _model.images[_model.textures[(int)ind.second].source];
 						//tinygltf::Sampler& sampler = _model.samplers[_model.textures[(int)ind.second].sampler];
 
@@ -241,18 +244,18 @@ namespace Zion
 						break;
 					}
 				}
-
 			}
-			addMaterial(index++, newMat);
+			if (foundMat)
+				addMaterial(index++, newMat);
 		}
 	}
 
 	void Gltf::render(glm::mat4 matrix)
 	{
 		_shader.enable();
+		_shader.setUniformMat4((GLchar *)"model_matrix", matrix);
 		for (std::pair<int, Material> material : _materials)
 			Material::sendMaterialToShader(_shader, material.second, material.first);
-		_shader.setUniformMat4((GLchar *)"model_matrix", matrix);
 		glBindVertexArray(_vao);
 		glDrawElements(GL_TRIANGLES, _indicesCount, GL_UNSIGNED_SHORT, (const GLvoid *)nullptr);
 		glBindVertexArray(0);

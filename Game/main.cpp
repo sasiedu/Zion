@@ -6,18 +6,18 @@ void    generateBlocks();
 Zion::Window    win;
 Zion::Shader    shader;
 Zion::Renderer  renderer;
-Zion::Camera    camera =  Zion::Camera(glm::vec3(0, 0, 3));
+Zion::Camera    camera =  Zion::Camera(glm::vec3(0, 6, 3), -35, -0.5);
 
 int map[10][10] = {
-	{1,1,1,1,1,1,1,1,1,1},
+	{1,0,1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,0,0,1},
+	{1,0,1,1,1,1,0,1,0,1},
+	{1,0,1,0,0,1,0,1,0,1},
+	{1,0,0,0,0,1,0,0,0,1},
+	{1,0,0,0,0,0,0,1,0,1},
 	{1,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,1},
+	{1,0,1,0,0,1,1,0,0,1},
+	{1,0,1,0,0,0,0,0,0,1},
 	{1,1,1,1,1,1,1,1,1,1},
 };
 
@@ -29,14 +29,10 @@ int     main(int ac, char **av)
 	glm::mat4   proj_mat = glm::perspective(glm::radians(70.0f), (float)1280 / (float)960, 0.1f, 100.0f);
 	shader.setUniformMat4((GLchar *)"proj_matrix", proj_mat);
 
-	//generateBlocks();
+	generateBlocks();
 
 	Zion::Renderable::startTime = (float)glfwGetTime();
 	Zion::Renderable::runTime = Zion::Renderable::startTime;
-
-	Zion::Gltf model;
-	model.loadFromFile(shader, "models/blocks/block1.gltf");
-	renderer.addToRender(&model, glm::translate(glm::mat4(), glm::vec3(0, 0, -1)));
 
 	while (!win.shouldClose() && !win.isKeyPressed(GLFW_KEY_ESCAPE))
 	{
@@ -50,6 +46,9 @@ int     main(int ac, char **av)
 		renderer.render();
 		win.updateWindow();
 	}
+	for (GLuint id : Zion::Texture::textureIDs)
+		glDeleteTextures(1, &id);
+	Zion::Texture::textureIDs.clear();
 	return 0;
 }
 
@@ -70,18 +69,18 @@ void    generateBlocks()
 	glm::mat4   mat;
 	Zion::Gltf  *block = new Zion::Gltf();
 
-	block->loadFromFile(shader, "models/blocks/block1.gltf");
+	block->loadFromFile(shader, "models/blocks/block2.gltf");
 
 	float  Z = -1;
 	for (int z = 0; z < 10; z++)
 	{
-		float X = 3;
+		float X = 1;
 		for (int x = 0; x < 10; x++)
 		{
 			if (map[z][x] == 1)
 				renderer.addToRender(block, glm::translate(mat, glm::vec3(X, 0, Z)));
-			X += 4;
+			X += 2;
 		}
-		Z -= 4;
+		Z -= 2;
 	}
 }
