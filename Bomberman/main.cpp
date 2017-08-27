@@ -4,14 +4,14 @@
 
 void    checkKeys(MainGame *game, std::vector<void *> params)
 {
-	if (game->getGameWindow().isKeyPressed(GLFW_KEY_A))
+	/*if (game->getGameWindow().isKeyPressed(GLFW_KEY_A))
 		game->getGameCamera().moveLeft(2.5f);
 	if (game->getGameWindow().isKeyPressed(GLFW_KEY_D))
 		game->getGameCamera().moveRight(2.5f);
 	if (game->getGameWindow().isKeyPressed(GLFW_KEY_W))
 		game->getGameCamera().moveForward(2.5f);
 	if (game->getGameWindow().isKeyPressed(GLFW_KEY_S))
-		game->getGameCamera().moveBackward(2.5f);
+		game->getGameCamera().moveBackward(2.5f);*/
 	if (game->getGameWindow().isKeyPressed(GLFW_KEY_UP))
 		game->getGameCamera().changeCameraYPos(2.5);
 	if (game->getGameWindow().isKeyPressed(GLFW_KEY_DOWN))
@@ -32,7 +32,7 @@ int     main(int ac, char **av)
 	Scene       *scene;
 
 	game.initGame(1280.0f, 760.0f, 70.0f);
-	game.setupGameCamera(glm::vec3(0, 0, 3), -15, 0);
+	game.setupGameCamera(glm::vec3(7, 13, -6), -80, -90);
 
 	scene = new Scene(&game, game.getMap("map1"), 5);
 
