@@ -40,13 +40,13 @@ namespace Zion
 	void Camera::moveLeft(float val)
 	{
 		_position -= _right * (val * Renderable::deltaTime);
-		//_updateCamera();
+		_updateCamera();
 	}
 
 	void Camera::moveRight(float val)
 	{
 		_position += _right * (val * Renderable::deltaTime);
-		//_updateCamera();
+		_updateCamera();
 	}
 
 	void Camera::moveUp(float val)
@@ -60,13 +60,13 @@ namespace Zion
 	void Camera::moveForward(float val)
 	{
 		_position += _front * (val * Renderable::deltaTime);
-		//_updateCamera();
+		_updateCamera();
 	}
 
 	void Camera::moveBackward(float val)
 	{
 		_position -= _front * (val * Renderable::deltaTime);
-		//_updateCamera();
+		_updateCamera();
 	}
 
 	void Camera::changeCameraXPos(float x)

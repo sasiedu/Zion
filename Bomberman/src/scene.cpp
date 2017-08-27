@@ -111,7 +111,7 @@ void Scene::_addPlayer(float x, float z)
 	{
 		_player = new Player(0, "player");
 		_player->setPosition(x, 0, z);
-		_player->scale(glm::vec3(0.3, 0.3, 0.3));
+		_player->scale(glm::vec3(0.2, 0.2, 0.2));
 		MainGame::renderer.addToRender(_player->getType(), _player->getId(), model,
 				_player->getTransformation());
 	}
@@ -129,28 +129,28 @@ void Scene::updatePlayer(MainGame *game, std::vector<void *> params)
 	if (game->getGameWindow().isKeyPressed(GLFW_KEY_S))
 	{
 		scene->_player->changePosZ(0.02f);
-		scene->_player->rotate(-180.0f, {0, 1, 0});
+		scene->_player->rotate(glm::radians(0.0f), {0, 1, 0});
 		MainGame::renderer.applyTransformationToRenderable(scene->_player->getType(),
 			scene->_player->getId(), scene->_player->getTransformation());
 	}
 	if (game->getGameWindow().isKeyPressed(GLFW_KEY_W))
 	{
 		scene->_player->changePosZ(-0.02f);
-		scene->_player->rotate(180.0f, {0, 1, 0});
+		scene->_player->rotate(glm::radians(180.0f), {0, 1, 0});
 		MainGame::renderer.applyTransformationToRenderable(scene->_player->getType(),
 				scene->_player->getId(), scene->_player->getTransformation());
 	}
 	if (game->getGameWindow().isKeyPressed(GLFW_KEY_A))
 	{
 		scene->_player->changePosX(-0.02f);
-		scene->_player->rotate(-90.0f, {0, 1, 0});
+		scene->_player->rotate(glm::radians(-90.0f), {0, 1, 0});
 		MainGame::renderer.applyTransformationToRenderable(scene->_player->getType(),
 				scene->_player->getId(), scene->_player->getTransformation());
 	}
 	if (game->getGameWindow().isKeyPressed(GLFW_KEY_D))
 	{
 		scene->_player->changePosX(0.02f);
-		scene->_player->rotate(90.0f, {0, 1, 0});
+		scene->_player->rotate(glm::radians(90.0f), {0, 1, 0});
 		MainGame::renderer.applyTransformationToRenderable(scene->_player->getType(),
 				scene->_player->getId(), scene->_player->getTransformation());
 	}
