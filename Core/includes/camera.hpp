@@ -26,7 +26,7 @@ namespace Zion
 		~Camera() = default;
 
 		glm::mat4       getViewMatrix() const;
-		glm::vec3       getCameraPositon();
+		glm::vec3       getCameraPosition();
 		void            moveLeft(float val);
 		void            moveRight(float val);
 		void            moveUp(float val);
